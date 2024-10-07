@@ -1,0 +1,2 @@
+# requirements.txt content
+aiohttp==3.8.1

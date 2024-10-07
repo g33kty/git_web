@@ -3,6 +3,8 @@ from socketserver import BaseServer
 import urllib.parse
 import mimetypes, pathlib
 import socket
+import os
+import json
 UDP_IP = '127.0.0.1'
 UDP_PORT = 5000
 MESSAGE = None
@@ -54,6 +56,18 @@ class HttpHandler(BaseHTTPRequestHandler):
         self.send_header('Location', '/')
         self.end_headers()
         run_client(UDP_IP, UDP_PORT, data_dict)
+
+
+# Check for storage directory
+storage_path = '/app/storage'
+if not os.path.exists(storage_path):
+    os.makedirs(storage_path)
+
+# Check for data.json file
+data_file_path = os.path.join(storage_path, 'data.json')
+if not os.path.exists(data_file_path):
+    with open(data_file_path, 'w') as file:
+        json.dump({}, file)  # Creates an empty json file if not present
 
 def run_client(ip, port, message):
     print(f'Connecting to server: {ip}:{port}')
